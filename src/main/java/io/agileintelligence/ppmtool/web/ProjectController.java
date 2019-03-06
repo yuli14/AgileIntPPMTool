@@ -1,6 +1,7 @@
 package io.agileintelligence.ppmtool.web;
 
 import io.agileintelligence.ppmtool.domain.Project;
+import io.agileintelligence.ppmtool.services.MapValidationErrorService;
 import io.agileintelligence.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,24 +25,17 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
+
     //post or create a project
     //response we want to get
     @PostMapping("")
     //need generic type here, change from project to ?
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result){
 
-        if(result.hasErrors()){
-
-            //key to the field, and value to be the message
-            Map<String,String> errorMap = new HashMap<>();
-            for(FieldError error: result.getFieldErrors()){
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-
-
-            return new ResponseEntity<Map<String,String>>(errorMap, HttpStatus.BAD_REQUEST);
-        }
-
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap != null) return errorMap;
 
         Project project1 = projectService.saveOrUpdateProject(project);
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
