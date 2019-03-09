@@ -16,10 +16,10 @@ class AddProject extends Component {
         this.onChange = this.onChange.bind(this);
         this.onSumbit = this.onSumbit.bind(this)
     }
-    onChange(e){
-        this.setState({[e.target.name]:e.target.value })
+    onChange(e) {
+        this.setState({ [e.target.name]: e.target.value })
     }
-    onSumbit(e){
+    onSumbit(e) {
         e.preventDefault();
         const newProject = {
             projectName: this.state.projectName,
