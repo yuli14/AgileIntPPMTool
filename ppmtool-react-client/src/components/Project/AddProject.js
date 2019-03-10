@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {createProject} from "../../actions/projectActions";
 
 class AddProject extends Component {
     constructor(){
@@ -14,12 +17,12 @@ class AddProject extends Component {
         };
 
         this.onChange = this.onChange.bind(this);
-        this.onSumbit = this.onSumbit.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
     }
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
     }
-    onSumbit(e) {
+    onSubmit(e) {
         e.preventDefault();
         const newProject = {
             projectName: this.state.projectName,
@@ -28,7 +31,7 @@ class AddProject extends Component {
             start_date : this.state.start_date,
             end_date: this.state.end_date
         };
-        console.log(newProject)
+        this.props.createProject(newProject, this.props.history)
     }
     render() {
         return (
@@ -38,7 +41,7 @@ class AddProject extends Component {
                         <div className="col-md-8 m-auto">
                             <h5 className="display-4 text-center">Create / Edit Project form</h5>
                             <hr/>
-                            <form onSubmit={this.onSumbit}>
+                            <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
                                     <input type="text"
                                            className="form-control form-control-lg "
@@ -99,5 +102,11 @@ class AddProject extends Component {
         );
     }
 }
-
-export default AddProject;
+AddProject.propTypes = {
+    //should not be = must be :
+    createProject : PropTypes.func.isRequired
+};
+export default connect(
+    null,
+    {createProject}
+    )(AddProject) ;
