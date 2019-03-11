@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {createProject} from "../../actions/projectActions";
-
+import classnames from "classnames"
 class AddProject extends Component {
     constructor(){
         super();
@@ -12,13 +12,23 @@ class AddProject extends Component {
             projectIdentifier: "",
             description: "",
             start_date : "",
-            end_date: ""
+            end_date: "",
+            errors:{}
 
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this)
     }
+    //life cycle hook
+
+    //nextContexts
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.errors){
+            this.setState({errors: nextProps.errors});
+        }
+    }
+
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value })
     }
@@ -34,8 +44,11 @@ class AddProject extends Component {
         this.props.createProject(newProject, this.props.history)
     }
     render() {
+        const {errors} = this.state;
+
         return (
             <div className="project">
+                <h1>{errors.projectName}</h1>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">
@@ -44,32 +57,43 @@ class AddProject extends Component {
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
                                     <input type="text"
-                                           className="form-control form-control-lg "
+                                           //bootstrap
+                                           className={classnames("form-control form-control-lg ",{"is-invalid": errors.projectName})}
                                            placeholder="Project Name"
                                            name = "projectName"
                                            value = {this.state.projectName}
                                            onChange={this.onChange}
 
                                     />
+                                    {/*//ifstatement*/}
+                                    {errors.projectName && (
+                                        <div className= "invalid-feedback">{errors.projectName}</div>
+                                    )}
                                 </div>
                                 <div className="form-group">
                                     <input type="text"
-                                           className="form-control form-control-lg"
+                                           className={classnames("form-control form-control-lg",{"is-invalid": errors.projectIdentifier})}
                                            placeholder="Unique Project ID"
                                            name = "projectIdentifier"
                                            value = {this.state.projectIdentifier}
                                            onChange={this.onChange}
 
                                     />
+                                    {errors.projectIdentifier && (
+                                        <div className= "invalid-feedback">{errors.projectIdentifier}</div>
+                                    )}
                                 </div>
                                 <div className="form-group">
-                                    <textarea className="form-control form-control-lg"
+                                    <textarea className={classnames("form-control form-control-lg",{"is-invalid": errors.description})}
                                               placeholder="Project Description"
                                               name = "description"
                                               value = {this.state.description}
                                               onChange={this.onChange}
 
                                     />
+                                    {errors.description && (
+                                        <div className= "invalid-feedback">{errors.description}</div>
+                                    )}
 
                                 </div>
                                 <h6>Start Date</h6>
@@ -81,6 +105,8 @@ class AddProject extends Component {
 
 
                                     />
+                                    <p>{errors.start_date}</p>
+
                                 </div>
                                 <h6>Estimated End Date</h6>
                                 <div className="form-group">
@@ -91,6 +117,7 @@ class AddProject extends Component {
 
 
                                     />
+                                    <p>{errors.end_date}</p>
                                 </div>
 
                                 <input type="submit" className="btn btn-primary btn-block mt-4"/>
@@ -104,9 +131,16 @@ class AddProject extends Component {
 }
 AddProject.propTypes = {
     //should not be = must be :
-    createProject : PropTypes.func.isRequired
+    //it's a function  not a project for createProject
+    createProject : PropTypes.func.isRequired,
+    errors: PropTypes.object.isRequired
 };
+
+const mapStateToProps = state =>({
+    errors : state.errors
+});
 export default connect(
-    null,
+    //can not be null
+    mapStateToProps,
     {createProject}
     )(AddProject) ;
