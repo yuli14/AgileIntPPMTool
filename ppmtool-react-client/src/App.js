@@ -16,6 +16,7 @@ class App extends Component {
                 <Router>
                     <div className="App">
                         <Header/>
+                        {/*route is parent of dashboard*/}
                         <Route exact path="/dashboard" component={Dashboard}/>
                         <Route exact path="/addProject" component={AddProject}/>
                     </div>
