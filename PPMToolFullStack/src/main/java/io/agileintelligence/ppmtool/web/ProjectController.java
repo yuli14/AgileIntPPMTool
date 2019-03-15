@@ -17,6 +17,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/project")
+//make it globally
+@CrossOrigin
 public class ProjectController {
 
     @Autowired
@@ -33,7 +35,7 @@ public class ProjectController {
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null) return errorMap;
-
+        //why need a project1
         Project project1 = projectService.saveOrUpdateProject(project);
         return new ResponseEntity<Project>(project, HttpStatus.CREATED);
     }
