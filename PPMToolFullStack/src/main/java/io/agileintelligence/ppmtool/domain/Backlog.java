@@ -20,7 +20,9 @@ public class Backlog {
 
     //    in the future will have one to one with project
 //    one to many with project tasks
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "backlog")
+//    updated here, change from CascadeType.ALL to CascadeType.REFRESH
+//    ?orphanRemoval child element no longer refer the parent, get rid of the child
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true)
     private List<ProjectTask> projectTaskList = new ArrayList<>();
 //    Jiran?
 //    just need to load partial project information rather than all information

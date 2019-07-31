@@ -32,9 +32,12 @@ public class ProjectTask {
     private Date create_At;
     private Date update_At;
 //    I can delete project task belongs to backlog, just refresh backlog
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+//    refresh reload the managed management database, only need the owning side  refreshing not need here
+//    need to remove CascadeType.REFRESH
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="backlog_id", updatable = false, nullable = false)
     @JsonIgnore
+//    holds a list of project task
     private Backlog backlog;
 
 

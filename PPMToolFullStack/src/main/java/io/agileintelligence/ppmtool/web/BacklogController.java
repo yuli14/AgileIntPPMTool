@@ -41,6 +41,8 @@ public class BacklogController {
         return new ResponseEntity<ProjectTask>(projectTask1, HttpStatus.CREATED);
     }
 
+
+
     @GetMapping("/{backlog_id}")
 //    must be the same
     public Iterable<ProjectTask> getProjectBacklog(@PathVariable String backlog_id){
@@ -67,4 +69,13 @@ public class BacklogController {
         return new ResponseEntity<ProjectTask>(updatedTask, HttpStatus.OK);
 
     }
+
+    @DeleteMapping("/{backlog_id}/{pt_id}")
+
+    public ResponseEntity<?>deleteProjectTask(@PathVariable String backlog_id, @PathVariable String pt_id){
+        projectTaskService.deletePTByProjectSequence(backlog_id, pt_id);
+
+        return new ResponseEntity<String>("Project Task with id " + pt_id + " was deleted" ,HttpStatus.OK);
+    }
+//    project backlog exist but the pt sequence not exist, or vice versa, or both
 }

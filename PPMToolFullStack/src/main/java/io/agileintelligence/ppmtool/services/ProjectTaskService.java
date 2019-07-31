@@ -106,4 +106,16 @@ public class ProjectTaskService {
 
     }
 
+    public void deletePTByProjectSequence(String backlog_id, String pt_id){
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id);
+//        Backlog backlog = projectTask.getBacklog();
+////        JPA relationship
+////        what if the list is too long !!!
+////        (1) At the project task level
+//        List<ProjectTask> pts = backlog.getProjectTaskList();
+//        pts.remove(projectTask);
+//        backlogRepository.save(backlog);
+        projectTaskRepository.delete(projectTask);
+    }
+
 }
