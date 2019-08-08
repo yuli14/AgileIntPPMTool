@@ -7,7 +7,8 @@ import {GET_ERRORS, GET_PROJECT, GET_PROJECTS, UPDATE_PROJECT, DELETE_PROJECT} f
 //must be (project, history) not {project, history}
 export const createProject = (project, history) => async dispatch =>{
   try{
-      const res = await axios.post("/api/project", project);
+      // const res =
+      await axios.post("/api/project", project);
       history.push("/dashboard");
       dispatch({
           type:GET_ERRORS,
