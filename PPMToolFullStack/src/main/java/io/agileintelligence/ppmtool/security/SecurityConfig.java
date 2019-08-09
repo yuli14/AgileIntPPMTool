@@ -18,15 +18,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //
     @Autowired
-    private JWTAuthenticationEntryPoint unathorizedHandler;
+    private JWTAuthenticationEntryPoint unauthorizedHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        super.configure(http);
 //        handle excenption to be throwed for exceptionHandling
 //        for h2
+//        this config has problem
         http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unathorizedHandler)
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -35,6 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         "/",
+                        "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
                         "/**/*.svg",
@@ -44,7 +46,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
 
 
-                ).permitAll()
+                ).permitAll()//must be "/api/users/** not "api/users/*"
+                .antMatchers("/api/users/**").permitAll()
                 .anyRequest().authenticated(); // To enable H2 Database
+//this config doesn't have problem
+//        http.cors().and().csrf().disable()
+//                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .headers().frameOptions().sameOrigin() //To enable H2 Database
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers(
+//                        "/",
+//                        "/favicon.ico",
+//                        "/**/*.png",
+//                        "/**/*.gif",
+//                        "/**/*.svg",
+//                        "/**/*.jpg",
+//                        "/**/*.html",
+//                        "/**/*.css",
+//                        "/**/*.js"
+//                ).permitAll()
+//                .antMatchers("/api/users/**").permitAll()
+//                .anyRequest().authenticated();
     }
 }
