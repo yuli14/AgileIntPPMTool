@@ -1,6 +1,8 @@
 package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.domain.User;
+import io.agileintelligence.ppmtool.domain.validator.UserValidator;
+import io.agileintelligence.ppmtool.exceptions.UsernameAlreadyExistsException;
 import io.agileintelligence.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,14 +22,19 @@ public class UserService {
 
 //        make sure that password and confirmPassword match
 //        we don;t persist or show confirmPassword
-        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-        return userRepository.save(newUser);
 
-//        try{
-//
-//        }
-//        catch (Exception e){
-//
-//        }
+
+        try{
+            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
+            newUser.setUsername(newUser.getUsername());
+            newUser.setConfirmPassword("");
+            return userRepository.save(newUser);
+        }
+        catch (Exception e){
+            throw new UsernameAlreadyExistsException("Username " + newUser.getUsername() + " Already exists");
+        }
+
+
+
     }
 }
