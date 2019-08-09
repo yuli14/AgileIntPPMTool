@@ -12,10 +12,27 @@ class Backlog extends Component {
     render() {
 
         const { project_tasks_prop } = this.props;
-
+        //organize by status
         const tasks = project_tasks_prop.map(project_task => (
             <ProjectTask key={project_task.id} project_task={project_task} />
         ));
+
+        let inProgressItems = [];
+        let todoItem = [];
+        let doneItem = [];
+        for(let i = 0; i< tasks.length; i++){
+            // console.log(tasks[i].props.project_task)
+            if(tasks[i].props.project_task.status === "TO_DO"){
+                todoItem.push(tasks[i])
+            }
+            else if(tasks[i].props.project_task.status === "IN_PROGRESS"){
+                inProgressItems.push(tasks[i])
+            }
+            else if(tasks[i].props.project_task.status === "DONE"){
+                doneItem.push(tasks[i])
+            }
+
+        }
         return (
             <div>
                 <div className="container">
@@ -27,7 +44,7 @@ class Backlog extends Component {
                                 </div>
                             </div>
 
-                            {tasks}{
+                            {todoItem}{
 
                             }
 
@@ -39,7 +56,9 @@ class Backlog extends Component {
                                     <h3>In Progress</h3>
                                 </div>
                             </div>
+                            {inProgressItems}{
 
+                        }
 
 
                         </div>
@@ -49,7 +68,9 @@ class Backlog extends Component {
                                     <h3>Done</h3>
                                 </div>
                             </div>
-                            {
+                            {doneItem}{
+
+
 
                                 //    javascript expression sample project task starts here, sample ends here
                             }

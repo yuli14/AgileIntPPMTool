@@ -29,6 +29,8 @@ export default function(state = initialstate, action){
             return {
             //    filtering out the project we delete
                 ...state,
+                project_tasks:state.project_tasks.filter(project_task =>
+                    project_task.projectSequence !== action.payload)
 
 
             }
