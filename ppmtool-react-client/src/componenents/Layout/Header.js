@@ -6,8 +6,7 @@ class Header extends Component {
         return (
             <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-4">
                 <div className="container">
-                    <Link className="navbar-brand" to="/dashboard">
-
+                    <Link className="navbar-brand" to="/">
                         Personal Project Management Tool
                     </Link>
                     <button
@@ -22,9 +21,8 @@ class Header extends Component {
                     <div className="collapse navbar-collapse" id="mobile-nav">
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item">
-                                <Link className="navbar-brand" to="/dashboard">
-
-                                    Personal Project Management Tool
+                                <Link className="nav-link" to="/dashboard">
+                                    Dashboard
                                 </Link>
                             </li>
                         </ul>

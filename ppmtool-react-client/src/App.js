@@ -15,6 +15,28 @@ import UpdateProjectTask from "./componenents/ProjectBoard/ProjectTasks/UpdatePr
 import Landing from "./componenents/Layout/Landing";
 import Register from "./componenents/userManagement/Register";
 import Login from "./componenents/userManagement/Login";
+import jwt_decode from "jwt-decode";
+import setJWTToken from "./securityUtils/setJWTToken"
+import {SET_CURRENT_USER} from "./actions/types";
+import {logout} from "./actions/securityActions";
+//we need to check whether local storage has token, and keep it as long as it;s valid, if not in state, we still have it in localstorage
+const jwtToken = localStorage.jwtToken;
+if(jwtToken){
+    //why need to set again? because every time we refresh, the state goes away, we need to load back
+    setJWTToken(jwtToken);
+    const decoded_jwtToken = jwt_decode(jwtToken);
+    store.dispatch({
+        type:SET_CURRENT_USER,
+        payload:decoded_jwtToken,
+    });
+
+    const currentTime = Date.now()/1000;
+    if(decoded_jwtToken.exp < currentTime){
+        // handle logout when token is not expired and user want to log out
+        store.dispatch(logout());
+        window.location.href="/";
+    }
+}
 
 class App extends Component{
     render(){
