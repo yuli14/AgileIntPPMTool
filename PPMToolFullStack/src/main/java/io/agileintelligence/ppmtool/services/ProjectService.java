@@ -24,9 +24,22 @@ public class ProjectService {
     @Autowired
     private UserRepository userRepository;
     public Project saveOrUpdateProject(Project project,  String username){
-//        find user
-        try {
+//
+// to avoid update the project by other users login with knowledge of projectID
+        if(project.getId() != null){
 
+            Project existingProject = projectRepository.findByProjectIdentifier(project.getProjectIdentifier());//?...
+
+            if(existingProject != null &&(!existingProject.getProjectLeader().equals(username))){
+//                not the owner of it
+                throw new ProjectNotFoundException("Project not found in your account");
+            }
+        }
+
+        try {
+// can not user findProjectByIdentifier because it will be null if it's creating a new project
+//            project.getID == null
+//            find by db id? null
             User user = userRepository.findByUsername(username);
             project.setUser(user);
             project.setProjectLeader(user.getUsername());
@@ -51,7 +64,6 @@ public class ProjectService {
         catch (Exception e){
             throw new ProjectIdException("Project Id '" + project.getProjectIdentifier().toUpperCase() + "' already exist");
         }
-        //Logic here
 
 
     }
@@ -83,5 +95,9 @@ public class ProjectService {
 
         projectRepository.delete(findProjectByIdentifier(projectId, username));
     }
+
+//    right id eg: 4 not 64444, can not pass it
+
+
 
 }
