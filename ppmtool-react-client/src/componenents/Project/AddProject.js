@@ -36,7 +36,7 @@ class AddProject extends Component {
         // ...
         // })
         this.setState({ [e.target.name]: e.target.value });
-        console.log(e.target)
+        // console.log(e.target)
     }
     onSubmit(e){
         e.preventDefault();
