@@ -34,6 +34,10 @@ public class ProjectService {
 //                not the owner of it
                 throw new ProjectNotFoundException("Project not found in your account");
             }
+            else if(existingProject == null){
+//
+                throw new ProjectNotFoundException("Project with ID " + project.getProjectIdentifier() + " can not be updated because it doesn't exits");
+            }
         }
 
         try {
