@@ -19,10 +19,14 @@ class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentDidMount() {
+            if(this.props.security.validToken){
+                this.props.history.push("/dashboard");
+            }
+    }
 
 
-
-componentWillReceiveProps(nextProps, nextContext) {
+    componentWillReceiveProps(nextProps, nextContext) {
     //    do not remove everything when refresh while the valid is still valid
     if(nextProps.security.validToken){
         this.props.history.push("/dashboard");

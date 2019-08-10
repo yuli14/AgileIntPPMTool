@@ -18,7 +18,11 @@ class Register extends Component {
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this)
     }
-
+    componentDidMount() {
+        if(this.props.security.validToken){
+            this.props.history.push("/dashboard");
+        }
+    }
     componentWillReceiveProps(nextProps, nextContext) {
         if(nextProps.errors){
             this.setState(
@@ -121,11 +125,13 @@ Register.propTypes = {
     createNewUser: PropTypes.func.isRequired,
     //step2, next to receive state from
     //use life cycle hooks didmount
-    errors: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
+    security: PropTypes.object.isRequired,
 };
 const mapStateToProps = state =>({
     // step 1 for error show up in form, prevent insert by backend
     errors: state.errors,
+    security: state.security,
 
 });
 
