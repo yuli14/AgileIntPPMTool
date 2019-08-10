@@ -2,11 +2,16 @@ package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.domain.Backlog;
 import io.agileintelligence.ppmtool.domain.Project;
+import io.agileintelligence.ppmtool.domain.User;
 import io.agileintelligence.ppmtool.exceptions.ProjectIdException;
+import io.agileintelligence.ppmtool.exceptions.ProjectNotFoundException;
 import io.agileintelligence.ppmtool.repositories.BacklogRepository;
+import io.agileintelligence.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import io.agileintelligence.ppmtool.repositories.ProjectRepository;
+
+import java.security.Principal;
 
 @Service
 public class ProjectService {
@@ -15,8 +20,16 @@ public class ProjectService {
 
     @Autowired
     private BacklogRepository backlogRepository;
-    public Project saveOrUpdateProject(Project project){
+
+    @Autowired
+    private UserRepository userRepository;
+    public Project saveOrUpdateProject(Project project,  String username){
+//        find user
         try {
+
+            User user = userRepository.findByUsername(username);
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
             String projectIdentifier = project.getProjectIdentifier().toUpperCase();
             project.setProjectIdentifier(projectIdentifier);
 
@@ -43,7 +56,7 @@ public class ProjectService {
 
     }
 
-    public Project findProjectByIdentifier(String projectId){
+    public Project findProjectByIdentifier(String projectId, String username){
 
 
         Project project =  projectRepository.findByProjectIdentifier(projectId.toUpperCase());
@@ -54,23 +67,21 @@ public class ProjectService {
             throw new ProjectIdException("Project Id '" + projectId + "' not exist");
 
         }
+//        why not principal.getuser here?
+        if(!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project not found in your account");
+        }
 
         return project;
     }
 
-    public Iterable<Project> findAllProjects(){
-        return projectRepository.findAll();
+    public Iterable<Project> findAllProjects(String username){
+        return projectRepository.findAllByProjectLeader(username);
     }
 
-    public void deleteProjectByIdentifier(String projectId){
+    public void deleteProjectByIdentifier(String projectId, String username){
 
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-
-        if(project == null){
-            throw new ProjectIdException("cannot Project with ID '" + projectId.toUpperCase() + "'. This project not exist");
-        }
-
-        projectRepository.delete(project);
+        projectRepository.delete(findProjectByIdentifier(projectId, username));
     }
 
 }
