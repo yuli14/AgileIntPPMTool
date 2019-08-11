@@ -1,5 +1,6 @@
 package io.agileintelligence.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class ProjectTask {
     private String status;
 //    so that we can group by priority
     private Integer priority;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date dueDate;
 //    ManyToOne with Backlog
 
@@ -29,7 +31,9 @@ public class ProjectTask {
     @Column(updatable = false)
     private String projectIdentifier;
 //    we can use history to trace back
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date create_At;
+    @JsonFormat(pattern = "yyyy-mm-dd")
     private Date update_At;
 //    I can delete project task belongs to backlog, just refresh backlog
 //    refresh reload the managed management database, only need the owning side  refreshing not need here
